@@ -1,0 +1,382 @@
+﻿Міністерство освіти і науки України
+Харківський національний університет радіоелектроніки
+
+
+Кафедра Програмної інженерії
+
+
+
+Звіт
+З лабораторної роботи №3
+з дисципліни «Скриптові мови програмування»
+
+
+
+
+
+
+
+
+
+Виконав									Перевірив
+ст.гр ПЗПІ-23-3 Чуваєв А.О.						ст. в. Сокорчук І.П.
+
+
+
+
+
+
+
+Харків 2025
+Створення WEB-Застосунків за допомогою PHP
+Мета роботи: Отримати базові знання з розробки сайтів.
+Хід роботи:
+1. Запуск серверу та ініциалізація:
+     Робота виконувалась локально, тому після завантаження PHP на локальний комп’ютер, скориставшись командою php -f main.php -S localhost:13131 було запущено сервер, на якому доступний веб-сайт.
+     Також, було ініціалізацію сайту, за допомогою пари класів та скриптів, де створюється сесія, і ініціалізуєьтся масив cart, а також створюється об’єкт Program, що має в собі інформацію про продукти, які вантажаться з JSON-файлу.
+     Код класів:
+       01: <?php
+       02: class Item
+       03: {
+       04:     public $id;
+       05:     public $name;
+       06:     public $price;
+       07: 
+       08:     public function __construct($id, $name, $price)
+       09:     {
+       10:         $this->id = $id;
+       11:         $this->name = $name;
+       12:         $this->price = $price;
+       13:     }
+       14: }
+       15: 
+       16: class Program
+       17: {
+       18:     public $items = [];
+       19: 
+       20:     public function __construct()
+       21:     {
+       22:         $jsonData = file_get_contents('items.json');
+       23:         $data = json_decode($jsonData, true);
+       24: 
+       25:         foreach ($data['Items'] as $id => $itemData) {
+       26:             $this->items[] = new Item($id, $itemData['name'], $itemData['price']);
+       27:         }
+       28:     }
+       29: }
+       30: 
+       31: ?>
+     Код скрипту ініціалізації
+       01: <?php
+       02: include_once("./classes/entities.php");
+       03: $program = new Program();
+       04: 
+       05: if (session_status() === PHP_SESSION_NONE) {
+       06:     session_start();
+       07: 
+       08:     if (!isset($_SESSION['cart'])) {
+       09:         $_SESSION['cart'] = [];
+       10:     
+       11:         foreach ($program->items as $id => $item) {
+       12:             $_SESSION['cart'][$id] = 0;
+       13:         }
+       14:     }
+       15: }
+       16: ?>
+2. Будова сторінок сайту:
+     Хедер та футер розроблено за допомогою відповідних HTML тегів, використовуючи деякі стилі та іконки, щоб запезпечити більшу інтуїтивність інтерфейсу. Код хедера програми:
+       01: <style>
+       02:     a {
+       03:         text-decoration: none;
+       04:         color: black;
+       05:         font-family: 'Arial, Helvetica, sans-serif';
+       06:         font-size: large;
+       07:     }
+       08: </style>
+       09: 
+       10: <header style="display: flex; justify-content: space-between; align-items: center; margin: 0 auto; height: 30px; padding: 0%;">
+       11:     <a style="text-decoration: none;" href="../index.php">
+       12:         <i class="fas fa-home" style="font-size:24px"></i> Home
+       13:     </a>
+       14:     <p>|</p>
+       15:     <a href="../products.php">
+       16:         <i class="fas fa-box-open" style="font-size:24px"></i> Products
+       17:     </a>
+       18:     <p>|</p>
+       19:     <a href="../cart.php">
+       20:         <i class="fas fa-shopping-cart" style="font-size:24px"></i> Cart
+       21:     </a>
+       22: </header>
+     Код футера програми:
+       01: <style>
+       02:     a {
+       03:         text-decoration: none;
+       04:         color: black;
+       05:         font-family: 'Arial, Helvetica, sans-serif';
+       06:         font-size: large;
+       07:     }
+       08: </style>
+       09: 
+       10: <footer style="display: flex; justify-content: space-around; align-items: center; margin: 0 auto; height: 30px; padding: 0%;">
+       11:     <a style="text-decoration: none;" href="../index.php">
+       12:         Home
+       13:     </a>
+       14:     <p>|</p>
+       15:     <a href="../products.php">
+       16:         Products
+       17:     </a>
+       18:     <p>|</p>
+       19:     <a href="../cart.php">
+       20:         Cart
+       21:     </a>
+       22: </footer>
+     Хедер та футер використовуються на кожній сторінці сайту, за допомогою PHP-команди include.
+3. Сторінка товарів:
+     Для побудови сторінки товарів, потрібно відобразити форму, яка буде містити перелік всіх товарів, ціну кожного товару, поле для введення кількості товару, та кнопку для надсилання форми. 
+     Код форми:
+       01: <?php
+       02: include_once("./scripts/init.php");
+       03: ?>
+       04: <!DOCTYPE html>
+       05: <html lang="en">
+       06: 
+       07: <head>
+       08:     <meta charset="UTF-8">
+       09:     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       10:     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+       11:     <link rel="stylesheet" href="./styles/style.css">
+       12:     <link rel="stylesheet" href="./styles/products.css">
+       13:     <title>Продукти</title>
+       14: </head>
+       15: 
+       16: <body>
+       17:     <?php
+       18:     include("./layout/header.php")
+       19:     ?>
+       20:     <div class="content">
+       21:         <form method="POST" action="./scripts/addToCart.php" class="product-form">
+       22:             <?php if (isset($_SESSION['form_error'])): ?>
+       23:                 <p style="color: red;"><?= $_SESSION['form_error'] ?></p>
+       24: 
+       25:                 <?php foreach ($_SESSION['form_data'] as $id => $badValue): ?>
+       26:                     <?php if (isset($program->items[$id])): ?>
+       27:                         <div class="product-row">
+       28:                             <span class="product-name"><?= htmlspecialchars($program->items[$id]->name) ?></span>
+       29:                             <input type="number"
+       30:                                 name="quantities[<?= $id ?>]"
+       31:                                 value="<?= htmlspecialchars($badValue) ?>"
+       32:                                 min="-10"
+       33:                                 class="product-qty">
+       34:                             <span class="product-price">$<?= number_format($program->items[$id]->price, 2) ?></span>
+       35:                         </div>
+       36:                     <?php endif; ?>
+       37:                 <?php endforeach; ?>
+       38: 
+       39:             <?php else: ?>
+       40:                 <?php foreach ($program->items as $id => $product): ?>
+       41:                     <div class="product-row">
+       42:                         <span class="product-name"><?= htmlspecialchars($product->name) ?></span>
+       43:                         <input type="number"
+       44:                             name="quantities[<?= $id ?>]"
+       45:                             value="0"
+       46:                             class="product-qty">
+       47:                         <span class="product-price">$<?= number_format($product->price, 2) ?></span>
+       48:                     </div>
+       49:                 <?php endforeach; ?>
+       50:             <?php endif; ?>
+       51: 
+       52:             <button type="submit" class="submit-button">Додати до кошика</button>
+       53:         </form>
+       54:     </div>
+       55:     <?php
+       56:     include("./layout/footer.php")
+       57:     ?>
+       58: 
+       59:     <?php
+       60:     unset($_SESSION['form_error'], $_SESSION['form_data']);
+       61:     ?>
+       62: </body>
+       63: 
+       64: </html>
+     Код хендлеру форми
+       01: <?php
+       02: session_start();
+       03: 
+       04: function isValidQuantity($value) {
+       05:     return is_numeric($value) && intval($value) > 0;
+       06: }
+       07: 
+       08: if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['quantities'])) {
+       09:     $quantities = $_POST['quantities'];
+       10:     $touched = [];
+       11:     $isInvalid = false;
+       12:     foreach ($quantities as $productId => $qty) {
+       13:         $qty = trim($qty);
+       14: 
+       15:         if($qty == 0){
+       16:             continue;
+       17:         }
+       18:         if (!isValidQuantity($qty)) {
+       19:             $isInvalid = true;
+       20:         } 
+       21: 
+       22:         $touched[intval($productId)] = $qty;
+       23:     }
+       24: 
+       25:     if ($isInvalid) {
+       26:         $_SESSION['form_error'] = "Перевірте будь ласка введені дані";
+       27:         $_SESSION['form_data'] = $touched;
+       28:         header("Location: ../products.php");
+       29:         exit();
+       30:     }
+       31: 
+       32:     foreach ($touched as $id => $value) {
+       33:         if ($value > 0) {
+       34:             $_SESSION['cart'][$id] = $value;
+       35:         } 
+       36:     }
+       37: 
+       38:     unset($_SESSION['form_error'], $_SESSION['form_data']);
+       39:     header("Location: ../cart.php");
+       40:     exit();
+       41: } else {
+       42:     echo "Неправильні дані.";
+       43: }
+       44:
+     Для реалізації додавання товарів в кошик, було використано форму з параметром action, що вказує на адресу відповідного файлу, що має відповідний скрипт для обробки запиту. В коді хендлеру, є функція isValidQuantity, що перевіряє чи є значення числовим, щоб запезпечити коректність вводу користувачем. Також далі йде перевірка кожного значення, що було введеним користувачем, і якщо хоча-б одне значення є не валідним, то його буде повернуто на сторінку з формою, але за допомогою сессії, хендлер запише додаткову інформацію про помилки, а також збереже дані, що було введено при першій відправці. І якщо користувач виправить валідність даних, то вибрані продукти будуть записані в сесію, в масив cart.
+4. Сторінка кошик.
+   На сторінку кошик треба додати  форму, що відображає елементи в кошику, а також загальну суму елементів, що було вибрано, а також додати кнопку видалення елементу з кошику. Для реалізації потрібно знову створити html сторінку, в яку треба записати ось такий код:
+       01: <?php
+       02: include_once("./scripts/init.php");
+       03: include_once("./scripts/cart.php");
+       04: ?>
+       05: <!DOCTYPE html>
+       06: <html lang="uk">
+       07: 
+       08: <head>
+       09:     <meta charset="UTF-8">
+       10:     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       11:     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+       12:     <link rel="stylesheet" href="./styles/style.css">
+       13:     <title>Кошик</title>
+       14: </head>
+       15: 
+       16: <body>
+       17:     <?php include("./layout/header.php"); ?>
+       18:     <div class="content">
+       19:         <h2>Кошик</h2>
+       20: 
+       21:         <?php if (isNotEmpty()): ?>
+       22:             <table cellpadding="8" cellspacing="0">
+       23:                 <thead>
+       24:                     <tr>
+       25:                         <th>ID</th>
+       26:                         <th>Назва</th>
+       27:                         <th>Ціна</th>
+       28:                         <th>Кількість</th>
+       29:                         <th>Сума</th>
+       30:                         <th>Дія</th>
+       31:                     </tr>
+       32:                 </thead>
+       33:                 <tbody>
+       34:                     <?php
+       35:                     $total = 0;
+       36:                     foreach (getCart() as $id => $quantity):
+       37:                         if ($quantity > 0 && isset($program->items[$id])):
+       38:                             $item = $program->items[$id];
+       39:                             $sum = $item->price * $quantity;
+       40:                             $total += $sum;
+       41:                     ?>
+       42:                             <tr>
+       43:                                 <td><?= $id ?></td>
+       44:                                 <td><?= htmlspecialchars($item->name) ?></td>
+       45:                                 <td>$<?= number_format($item->price, 2) ?></td>
+       46:                                 <td><?= $quantity ?></td>
+       47:                                 <td>$<?= number_format($sum, 2) ?></td>
+       48:                                 <td>
+       49:                                     <form method="POST" action="./scripts/deleteFromCart.php" style="display:inline;">
+       50:                                         <input type="hidden" name="remove_id" value="<?= $id ?>">
+       51:                                         <button type="submit">Видалити</button>
+       52:                                     </form>
+       53:                                 </td>
+       54:                             </tr>
+       55:                     <?php
+       56:                         endif;
+       57:                     endforeach;
+       58:                     ?>
+       59:                     <tr>
+       60:                         <td colspan="4" style="text-align:right; font-weight:bold;">Всього:</td>
+       61:                         <td colspan="2" style="font-weight:bold;">$<?= number_format($total, 2) ?></td>
+       62:                     </tr>
+       63:                 </tbody>
+       64:             </table>
+       65:             <form method="POST" action="./scripts/clearCart.php" style="margin-top: 20px;">
+       66:                 <button type="submit" name="action" value="cancel">Скасувати</button>
+       67:                 <button type="submit" name="action" value="pay">Оплатити</button>
+       68:             </form>
+       69:         <?php else: ?>
+       70:             <p>Кошик порожній. <a href="./products.php">Перейти до покупок</a></p>
+       71:         <?php endif; ?>
+       72:     </div>
+       73:     <?php include("./layout/footer.php"); ?>
+       74: </body>
+       75: 
+       76: </html>
+     А також функції необхідні для відображення повної інформації про елементи таблиці:
+       01: <?php
+       02: function getCart()
+       03: {
+       04:     if (isset($_SESSION['cart'])) {
+       05:         return $_SESSION['cart'];
+       06:     }
+       07: }
+       08: 
+       09: function isNotEmpty()
+       10: {
+       11:     if (isset($_SESSION['cart'])) {
+       12:         foreach ($_SESSION['cart'] as $id => $item) {
+       13:             if ($item != 0) {
+       14:                 return true;
+       15:             }
+       16:         }
+       17:         return false;
+       18:     }
+       19: }
+     І функція імітації закупівлі, а також відміни закупки товарів:
+       01: <?php
+       02: session_start();
+       03: 
+       04: if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+       05:     if (isset($_POST['action']) && ($_POST['action'] === 'pay' || $_POST['action'] === 'cancel')) {
+       06:         unset($_SESSION['cart']);
+       07:     }
+       08: }
+       09: 
+       10: header("Location: ../cart.php"); 
+       11: exit;
+     В формі, за допомогою тегів Table, tr, th, td, будується таблиця, що відображає елементи відповідною таблицею, в якій вказано всі необхідні атрибути: id, name, price, count та загальний total. А також дві кнопки, що імітують покупку та відміну покупки товарів, очищенням сесії. Якщо в кошику немає товарів, то тоді сторінка відображає гіперпосилання на сторінку з продуктами. 
+     
+     Висновок
+     У результаті виконання лабораторної роботи було створено повноцінний вебсайт інтернет-магазину з двома основними сторінками — сторінкою товарів та сторінкою кошика. Користувач має змогу переглядати доступні товари, вказувати бажану кількість і додавати їх до кошика. Усі обрані товари зберігаються в сесії користувача. Кошик відображає перелік замовлених товарів, їх кількість, ціну та сумарну вартість, а також дозволяє видалити окремі позиції. Якщо кошик порожній, відображається посилання на сторінку покупок. Усі частини сайту структуровані за шаблоном: шапка, тіло та підвал. Реалізація відповідає поставленим вимогам, сайт функціонує коректно і демонструє базові навички роботи з PHP, HTML та сесіями.
+
+
+     ДОДАТОК А ВІДЕОЗАПИС
+ https://youtu.be/gwFzqml2CVY
+ 00:00-00:27 — Вступ та постановка завдання
+ 00:27-00:53 — Технічні вимоги проекту
+00:53-01:40 — Демонстрація інтерфейсу програми
+ 01:40-02:05 — Тестування функціоналу покупок
+ 02:05-02:40 — Додатковий функціонал
+ 02:40-03:20 — Структура проекту та головна сторінка
+ 03:20-03:50 — Навігація та стилізація
+ 03:50-04:30 — Сторінка товарів (Products.php)
+ 04:30-05:20 — Відображення товарів та стилізація
+ 05:20-06:20 — Обробка POST запитів та валідація
+ 06:20-07:40 — Логіка додавання товарів до кошика
+ 07:40-08:40 — Функції роботи з кошиком
+ 08:40-09:30 — Відображення кошика та підрахунки
+ 09:30-09:50 — Ініціалізація та завершення
+     
+     24
+     
+     

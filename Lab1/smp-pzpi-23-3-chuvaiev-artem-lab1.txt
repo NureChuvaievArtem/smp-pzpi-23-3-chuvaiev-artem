@@ -1,0 +1,547 @@
+﻿Міністерство освіти і науки України
+Харківський національний університет радіоелектроніки
+
+
+Кафедра Програмної інженерії
+
+
+
+Звіт
+З лабораторної роботи №1
+з дисципліни «Скриптові мови програмування»
+
+
+
+
+
+
+
+
+
+Виконав									Перевірив
+ст.гр ПЗПІ-23-3 Чуваєв А.О.						ст. в. Сокорчук І.П.
+
+
+
+
+
+
+
+Харків 2025
+1. Хід роботи
+1.1  Постановка задачі:
+       
+     Розробити Bash-скрипт, який обробляє експортований із сайту https://cist.nure.ua/ розклад занять для всіх груп потоку в форматі CSV та перетворює його у формат CSV для завантаження в Google Календар https://support.google.com/.
+1.1.1 Вимоги до скрипта:
+     ‒ Ім’я скрипта: ~/{імʼя-облікового-запису}-task2
+     ‒ Синтаксис виклику:{імʼя-облікового-запису}-task2 [--help | --version] | [[-q|--quiet] [академ_група] файл_із_cist.csv]
+1.1.2 Ключі скрипта:
+     ‒ --help — вивести довідку, завершити роботу та повернути успішний результат у батьківський процес
+     ‒ --version — вивести інформацію про версію, завершити роботу та повернути успішний результат у батьківський процес
+     ‒ -q або --quiet — не виводити інформацію в стандартний потік виведення
+1.1.3 Параметри: 
+     ‒ академ_група — назва академічної групи (шаблон)
+     ‒ файл_із_cist.csv — експортований CSV файл розкладу занять
+1.1.4 Обробка файла 
+     ‒ Читати вхідний CSV файл та вибирати рядки, що відповідають вибраній академічній групі.
+     ‒ Визначити порядкий номер для кожного заняття (лекція, практичне заняття, лабораторна робота) із врахуванням того, що лабораторні роботи складаються із двох пар, а решта занять — із однієї пари.
+     ‒ Створити поле «Subject» із поля «Тема» вхідного CSV файла, але БЕЗ назви академічної групи та дефіса на початку цього поля ("ПЗПІ-23-1 - ПрПА Пз DL ПЗПІ-23-1")
+     ‒ Додати порядковий номер наприкінці теми (Subject) кожного заняття після крапки з комою (опис заняття; №1)
+     ‒ Переформатувати дату та час до формату «mm/dd/yyyy, HH:MM AM|PM,» Gogle Календаря 12-годинний формат часу. Наприклад: 02/30/2025, 11:15 AM,
+     ‒ Заповнити поле «Description» текстом із поля «Опис (Описание)» вхідного CSV файла
+     ‒ Відформатувати дані відповідно до вимог Google Календаря https://support.google.com/calendar/.
+     ‒ Виводити створені для Google Календаря дані у стандартний потік виведення, якщо це не заблоковано ключем -q або --quiet
+     ‒ Записати результат у новий файл із назвою:
+     ‒ Google_TimeTable_??_??_20??.csv
+     ‒ де ??_??_20?? — дата, що відповідає вхідному файлу.
+1.1.5 Обробка аргументів
+     ‒ Вивести меню вибору файла за допомогою команди select та сформувати відсортований за датою в іменах файлів (від старіших до новіших) список доступних у поточній директорії CSV файлів за шаблоном:
+	TimeTable_??_??_20??.csv
+     ‒ Відкрити вибраний CSV файл та згенерувати список академічних груп, що містяться у файлі, відсортувати їх за алфавітом (sort, uniq) та вивести меню вибору групи за допомогою select.
+1.1.6 Обробка помилок
+     ‒ Якщо файл не знайдено або файл є недоступним для читання, вивести повідомлення про помилку в стандартний потік помилок та повернути код помилки.
+     ‒ Якщо група не знайдена у вибраному файлі, повідомити про це користувача та запропонувати вибір іншої групи.
+     ‒ Якщо група не вказана, але у вказаному файлі присутня лише одна група, створити CSV файл Google Календаря для цієї групи.
+     ‒ Якщо сталася помилка під час обробки файла, повідомити про це та завершити роботу з відповідним кодом помилки.
+1.1.7 Обробка відсутніх аргументів
+     Якщо при виклику скрипта не вказана академічна група або вхідний CSV файл, то скрипт повинен:
+     ‒ Вивести меню вибору файла за допомогою команди select та сформувати відсортований за датою в іменах файлів (від старіших до новіших) список доступних у поточній директорії CSV файлів за шаблоном:  TimeTable_??_??_20??.csv
+     ‒ Відкрити вибраний CSV файл та згенерувати список академічних груп, що містяться у файлі, відсортувати їх за алфавітом (sort, uniq) та вивести меню вибору групи за допомогою select.
+1.1.8 Додаткові вимоги:
+     ‒ Скрипт має необхідні права доступу:
+     		Файл скрипта виконуваний для всіх користувачів
+     		Редагування файла скрипта дозволене лише власнику файла
+     
+1.2  Написання алгоритму
+1.2.1 Створення файлу
+     Почнімо написання алгоритму зі створення файлу на сервері, знову скористаймося командою touch. 
+       touch pzpi-23-3-chuvaiev-artem-task2
+	Після цього, одразу ж змінемо права доступу до файлу, скориставшись командою chmod:
+       chmod 755 pzpi-23-3-chuvaiev-artem-task2
+       chmod +x pzpi-23-3-chuvaiev-artem-task2
+       
+1.2.2 Обробка аргументів та ключів переданих до скрипту.
+     Для обробки аргументів, скористаймося while циклом, який буде виконуватись, допоки всі аргументи не будуть оброблені. В цьому циклі будемо перевіряти кожен аргумент поступово, в порядку як вони мають йти за постановкою задачі, починаючи з ключів, а потім група і останнім файл. Також для обробки тихого режиму, створимо змінну quiet_mode. В результаті маємо ось такий код:
+       137: quiet_mode=false
+       138: 
+       139: while [[ $# -gt 0 ]]; do
+       140:     case "$1" in
+       141:         --help)
+       142:             echo_help
+       143:             exit 0
+       144:             ;;
+       145:         --version)
+       146:             display_version
+       147:             exit 0
+       148:             ;;
+       149:         -q|--quiet)
+       150:             quiet_mode=true
+       151:             shift
+       152:             ;;
+       153:         *)
+       154:             break
+       155:             ;;
+       156:     esac
+       157: done
+       158: 
+       159: if [[ $# -eq 1 ]]; then
+       160:     csv_file="$1"
+       161: else
+       162:     academic_group="$1"
+       163:     csv_file="$2"
+       164: fi
+1.2.3 Обробка ключів
+     Скрипт повинен повертати довідку, інформацію про версію, а також мати змогу працювати у тихому режимі. Для цього є ось такий код:
+       03: echo_help() {
+       04:     echo "Usage: {login_name}-task2 [--help | --version] | [[-q|--quiet] [group] [cist_file.csv]"
+       05:     echo
+       06:     echo "Options:"
+       07:     echo "  --help           Show Description"
+       08:     echo "  --version        Show script version"
+       09:     echo "  -q, --quiet      Don't output information to STDOUTPUT"
+       10:     echo "  cist_file.csv    Path to CSV (Optional)"
+       11:     echo "  group            Academic Group (Optional)"
+       12: }
+       13: 
+       14: display_version() {
+       15:     echo "task2 version 1.0.0"
+       16: }
+     
+     Ці функції використовуються в скрипті обробки аргументів вище, де перша виводить довідку, а друга версію скрипту. А для підтримки тихого режиму далі є один умовний оператор, що буде викликати функцію обробки файлу по різному, точніше в одному випадку буде виводити лише у файл, а в іншому і в файл і в станрдартний потік виведення, за допомогою команди tee:
+       169: if [[ "$quiet_mode" == true ]]; then
+       170:     process_data > "Google_${csv_file}" 
+       171:     status=$?
+       172: else
+       173:     process_data | tee "Google_${csv_file}"
+       174:     status=${PIPESTATUS[0]}
+       175: fi
+1.2.4 Обробка відсутніх аргументів
+     Відповідно до пункту 1.1.7, нам потрібно оброблювати, коли користувач не вказав певні аргументи. Тому забезпечимо вибір файлу для користувача за шаблоном, зазначеним вище. Отже, маємо таку функцію вибору файлу:
+       18: chooseFile(){
+       19:     if [[ -z "$csv_file" ]]; then
+       20:         pattern="TimeTable_??_??_20??.csv"
+       21: 
+       22:         files=($(ls -1t $pattern))
+       23:         
+       24:         if [[ ${#files[@]} -eq 0 ]]; then
+       25:             echo "No files found according to pattern: $pattern"
+       26:             exit 1
+       27:         fi
+       28: 
+       29:         echo "Select File:"
+       30:         select file in "${files[@]}"; do
+       31:             if [[ -n "$file" ]]; then
+       32:                 echo "You've selected: $file"
+       33:                 csv_file=$file
+       34:                 break
+       35:             else
+       36:                 echo "Wrong choice, try again"
+       37:             fi
+       38:         done
+       39:     fi
+       40: 
+       41:     if [ ! -e "$csv_file" ]; then
+       42:         echo "File doesn't exist"
+       43:         exit 1
+       44:     fi
+       45: 
+       46:     if [ ! -r "$csv_file" ]; then
+       47:         echo "File is not readable"
+       48:         exit 1
+       49:     fi
+       50: }
+       51:
+     В цій функції, якщо користувач не вказав ім’я файлу, то ми беремо патерн, та виодимо всі файли в директорії, які відповідають зазначеному шаблону. Якщо таких файлів немає, то повертається помилка, в іншому випадку, ми надаємо користувачу вибір, відносно всіх знайдених файлів, і після вибору ми перевіряємо чи файл доступний для відкриття та читання і якщо ні, то ми завершуємо скрипт.
+     Також, можливий випадок коли користувач не вказує академічну групу, вказуючи файл, отже ми повинні оброблювати перевірку групи. Маємо ось такий код:
+       52: chooseGroup(){
+       53:     groups=($(iconv -f cp1251 -t UTF-8 "$csv_file" | awk -F',' 'NR > 1 {print substr($1,2,10)}' | sort | uniq))
+       54: 
+       55:     if [[ -z "$academic_group" && ${#groups[@]} -eq 1 ]]; then 
+       56:         academic_group=${groups[0]}
+       57:         echo "Only one group found: $academic_group. Using this group."
+       58:     elif [[ -z "$academic_group" ]]; then 
+       59:         echo "Select group"
+       60:         select group in ${groups[@]}; do
+       61:             if [[ -n "$group" ]]; then
+       62:                 academic_group=$group
+       63:                 break
+       64:             else
+       65:                 echo "Wrong choice, try again"
+       66:             fi
+       67:         done
+       68:     elif [[ ! " ${groups[*]} " =~ " ${academic_group} " ]]; then
+       69:         echo "No specified group found in a file, select different one: "
+       70:         select group in ${groups[@]}; do
+       71:             if [[ -n "$group" ]]; then
+       72:                 academic_group=$group
+       73:                 break
+       74:             else
+       75:                 echo "Wrong choice, try again"
+       76:             fi
+       77:         done
+       78:     fi
+       79: }
+       
+     В цьому коді ми відкриваємо файл в кодуванні UTF-8, за допомогою iconv і дістаємо звідти всі імена груп, за допомогою команд awk, в якій ми виводимо лише значення, де номер ряду більший за 1, тобто не заголовок, і також оброблюємо, щоб позбутися всіх зайвих символів з 1 стовпчику файлу, бо в цист файлі, завжди пишеться назва групи, і за допомогою цього, ми можемо сформувати унікальний список. І після того як ми знайшли всі групи, ми передаємо їх до функції sort, що сортує всі ці групи, а потім робимо uniq, що позбувається від всіх дуплікатів. Після чого нам треба виконати ще одну умову – якщо група одна, то використовувати її, а інакше запропонувати вибір допоки не вибире правильний. Тому для цього скористаємося командою select, з повного списку груп.
+1.2.5 Обробка файлу для перетворення в формат Google Calendar
+     Для перетворення в формат календарю, скориставшись документацією гуглу, можемо зробити висновок, що нам потрібен CSV файл UTF-8 кодування, в якому будуть наявні такі поля: Subject, Start Date, Start Time, End Date, End Time, Description. Але також варто враховувати, що у нас ще є умови для видалення академічної групи і тире з назви, переведення часу в a.m. та p.m, а також форматування дати в формат 02/30/2025, а також варто пронумерувати заняття в правильному порядку, враховуючи, що на 1 лб мають припадати декілька занять. Тому підемо почергово
+1. Функція форматування часу з 24 годинного формату в 12 годинний.
+       83:     function formatTime(timeStr,   parts, hour, minute, ampm, result) {
+       84:         split(timeStr, parts, ":");
+       85:         hour = parts[1] + 0;
+       86:         minute = parts[2];
+       87:         ampm = (hour >= 12) ? "PM" : "AM";
+       88:         hour = (hour % 12 == 0) ? 12 : (hour % 12);
+       89:         result = (hour < 10 ? "0" hour : hour) ":" minute " " ampm;
+       90:         return result;
+       91:     }
+       
+     Ця функція викликається в середині awk пайплайну, і розбиває строку часу на декілька частин, і далі шляхом перевірок, виставляє час по модулю 12 та a.m/p.m.
+2. Частина коду, яка відповідає за видалення назви академічної групи і тире, та форматування дати, а також сортування за назвою та датою початку, для подальшої нумерації:
+       093:     {
+       094:         split($1, temp_group, " ")
+       095:         if (temp_group[1] ~ academic_group && (length(temp_group[1]) - 1) == length(academic_group)) {
+       096:             subject = substr($1, 2)
+       097:             sub("^" academic_group " - ", "", subject)
+       098: 
+       099:             split($2, date, ".");
+       100:             formattedStartDate = date[2] "/" date[1] "/" date[3];
+       101: 
+       102:             split($4, date, ".");
+       103:             formattedEndDate = date[2] "/" date[1] "/" date[3];
+       104: 
+       105:             formattedStartTime = formatTime($3)
+       106:             formattedEndTime = formatTime($5)
+       107: 
+       108:             print subject "|" formattedStartDate "|" formattedStartTime "|" formattedEndDate "|" formattedEndTime "|" $12
+       109:         }
+       110:     }' | sort -t"|" -k1,1 -k2,2 | awk -F'|' -v prevName="$prevName" -v counter="$counter" -v pair_counter="$pair_counter" '
+     В цьому коді ми беремо інформацію в кожному рядку почергово, і оброблюємо її таким чином, що на виході маємо 6 колонок значень в правильному форматуванні, за допомогою додаткових обробок, які саме нам і потрібні для додавання до гугл календарю. А такоє ми сортуємо ці дані за назвою і датою початку, і передаємо першо-оброблені дані в наступну awk функцію, що буде відповідати за нумерацію занять.
+3. Частина коду що відповідає за нумерацію занять:
+       111:     {
+       112:         if(NR == 1){
+       113:             print("Subject,Start Date,Start Time,End Date,End Time,Description");
+       114:         }
+       115:         if($1 == prevName){
+       116:             if($1 ~ "Лб"){
+       117:                 if(pair_counter % 2 == 1){
+       118:                     print($1 "; №" counter "," $2 "," $3 "," $4 "," $5 "," $6)
+       119:                 } else { 
+       120:                     counter += 1 
+       121:                     print($1 "; №" counter "," $2 "," $3 "," $4 "," $5 "," $6)
+       122:                 }
+       123:                 pair_counter += 1 
+       124:             } else { 
+       125:                 counter += 1  
+       126:                 print($1 "; №" counter "," $2 "," $3 "," $4 "," $5 "," $6)
+       127:             }
+       128:         } else {
+       129:             pair_counter = 1
+       130:             counter = 1
+       131:             print($1 "; №" counter "," $2 "," $3 "," $4 "," $5 "," $6)
+       132:         }
+       133:         prevName = $1 
+       134:     }'
+     В цьому коді, ми перевіряємо, ряди, і якщо назва занять однакова і це не ЛБ, то ми просто інкрементуємо показник і додаємо № і номер зайняття до його назви, а якщо ж це ЛБ, то ми підвищуємо номер лише після двох зайнять, щоб вирішити питання з нумерацією лб. Після чого ці дані виводяться або лише в файл, або в файл та стандартний потік виведення в залежності від флагу -q.
+1.3  Тестування програми
+     Тестування основної програми:
+     ‒ З усіма аргументами на місці та коректним файлом:
+       pzpi-23-3-chuvaiev-artem@vps52766:~$ ./pzpi-23-3-chuvaiev-artem-task2 ПЗПІ-23-3 TimeTable_15_03_2025.csv
+       Subject,Start Date,Start Time,End Date,End Time,Description
+       *ВІА Лб DL *ВІА(ПЗПІ-23-)-3; №1,03/12/2025,07:45 AM,03/12/2025,09:20 AM,*ВІА Лб DL *ВІА(ПЗПІ-23-)-3
+       *ВІА Лб DL *ВІА(ПЗПІ-23-)-3; №1,03/12/2025,09:30 AM,03/12/2025,11:05 AM,*ВІА Лб DL *ВІА(ПЗПІ-23-)-3
+       *ВІА Лб DL *ВІА(ПЗПІ-23-)-3; №2,04/02/2025,07:45 AM,04/02/2025,09:20 AM,*ВІА Лб DL *ВІА(ПЗПІ-23-)-3
+       …
+     ‒ З усіма аргументами, але відсутньою групою у файлі:
+       pzpi-23-3-chuvaiev-artem@vps52766:~$ ./pzpi-23-3-chuvaiev-artem-task2 ПЗПІ-23-11 TimeTable_15_03_2025.csv
+       No specified group found in a file, select different one:
+       1) ПЗПІ-23-1     3) ПЗПІ-23-2    5) ПЗПІ-23-4    7) ПЗПІ-23-6    9) ПЗПІ-23-8
+       2) ПЗПІ-23-10    4) ПЗПІ-23-3    6) ПЗПІ-23-5    8) ПЗПІ-23-7   10) ПЗПІ-23-9
+       #? 4
+       Subject,Start Date,Start Time,End Date,End Time,Description
+       *ВІА Лб DL *ВІА(ПЗПІ-23-)-3; №1,03/12/2025,07:45 AM,03/12/2025,09:20 AM,*ВІА Лб DL *ВІА(ПЗПІ-23-)-3
+       *ВІА Лб DL *ВІА(ПЗПІ-23-)-3; №1,03/12/2025,09:30 AM,03/12/2025,11:05 AM,*ВІА Лб DL *ВІА(ПЗПІ-23-)-3
+       …
+     ‒ З відсутньою групою:
+       pzpi-23-3-chuvaiev-artem@vps52766:~$ ./pzpi-23-3-chuvaiev-artem-task2 TimeTable_15_03_2025.csv
+       Select group
+       1) ПЗПІ-23-1     3) ПЗПІ-23-2    5) ПЗПІ-23-4    7) ПЗПІ-23-6    9) ПЗПІ-23-8
+       2) ПЗПІ-23-10    4) ПЗПІ-23-3    6) ПЗПІ-23-5    8) ПЗПІ-23-7   10) ПЗПІ-23-9
+       #? 3
+       Subject,Start Date,Start Time,End Date,End Time,Description
+       *ВІА Лб DL *ВІА(ПЗПІ-23-)-2; №1,03/26/2025,07:45 AM,03/26/2025,09:20 AM,*ВІА Лб DL *ВІА(ПЗПІ-23-)-2
+       *ВІА Лб DL *ВІА(ПЗПІ-23-)-2; №1,03/26/2025,09:30 AM,03/26/2025,11:05 AM,*ВІА Лб DL *ВІА(ПЗПІ-23-)-2 
+       …
+     ‒ З відсутнім файлом:
+       pzpi-23-3-chuvaiev-artem@vps52766:~$ ./pzpi-23-3-chuvaiev-artem-task2
+       Select File:
+       1) TimeTable_15_03_2026.csv
+       2) TimeTable_14_02_2025.csv
+       3) TimeTable_15_03_2025.csv
+       #? 33
+       Wrong choice, try again
+       #? 3
+       You've selected: TimeTable_15_03_2025.csv
+       Select group
+       1) ПЗПІ-23-1     3) ПЗПІ-23-2    5) ПЗПІ-23-4    7) ПЗПІ-23-6    9) ПЗПІ-23-8
+       2) ПЗПІ-23-10    4) ПЗПІ-23-3    6) ПЗПІ-23-5    8) ПЗПІ-23-7   10) ПЗПІ-23-9
+       #? 4
+       Subject,Start Date,Start Time,End Date,End Time,Description
+       *ВІА Лб DL *ВІА(ПЗПІ-23-)-3; №1,03/12/2025,07:45 AM,03/12/2025,09:20 AM,*ВІА Лб DL *ВІА(ПЗПІ-23-)-3
+       *ВІА Лб DL *ВІА(ПЗПІ-23-)-3; №1,03/12/2025,09:30 AM,03/12/2025,11:05 AM,*ВІА Лб DL *ВІА(ПЗПІ-23-)-3
+	…
+     ‒ З недоступним файлом:
+       pzpi-23-3-chuvaiev-artem@vps52766:~$ ./pzpi-23-3-chuvaiev-artem-task2 TimeTable_14_03_2025.csv
+       File doesn't exist
+       pzpi-23-3-chuvaiev-artem@vps52766:~$ ./pzpi-23-3-chuvaiev-artem-task2 TimeTable_14_02_2025.csv
+       File is not readable
+     
+     Тестування флагів:
+     ‒ --help: 
+       pzpi-23-3-chuvaiev-artem@vps52766:~$ ./pzpi-23-3-chuvaiev-artem-task2 --help
+       Usage: {login_name}-task2 [--help | --version] | [[-q|--quiet] [group] [cist_file.csv]
+       
+       Options:
+         --help           Show Description
+         --version        Show script version
+         -q, --quiet      Don't output information to STDOUTPUT
+         cist_file.csv    Path to CSV (Optional)
+         group            Academic Group (Optional)
+     ‒ --version:
+       pzpi-23-3-chuvaiev-artem@vps52766:~$ ./pzpi-23-3-chuvaiev-artem-task2 --version
+       task2 version 1.0.0
+     ‒ -q | --quiet: 
+       pzpi-23-3-chuvaiev-artem@vps52766:~$ ./pzpi-23-3-chuvaiev-artem-task2 -q ПЗПІ-23-3 TimeTable_15_03_2025.csv
+       pzpi-23-3-chuvaiev-artem@vps52766:~$
+     Нічого не було надруковано в стандартний потік, але файл був сформований коректно.
+     Висновок
+     У ході лабораторної роботи я ознайомився з основними командами Bash для обробки текстових даних та роботи з файлами. Було створено Bash-скрипт, що перетворює розклад занять у формат, придатний для імпорту в Google Календар. Під час виконання завдання я навчився працювати з такими утилітами як awk, sed, sort, uniq, select, iconv тощо, а також реалізовувати обробку параметрів командного рядка, перевірку помилок і форматування даних відповідно до заданих вимог. Скрипт успішно обробляє CSV-файл, дозволяє обрати академічну групу та генерує коректний календарний файл.
+ДОДАТОК А ВІДЕОЗАПИС
+ https://youtu.be/DvqEedVAPVE
+ 0:00 — Вступ та постановка завдання
+ 00:35 — Демонстрація команд help та version
+ 01:13 — Автоматичний вибір файлу
+ 01:52 — Перевірка результату
+ 02:36 — Тестування різних груп
+ 03:27 — Режим Quiet
+ 03:49 — Імпорт в Google Calendar
+ 04:37 — Перевірка календаря
+ 04:56 — Огляд коду програми
+ 05:08 — Функція Help
+ 05:25 — Перевірка файлів
+ 05:56 — Вибір групи
+ 06:29 — AWK обробка
+ 06:57 — Основна обробка данних
+ 07:14 — Функція форматування часу
+ 08:02 — Обробка рядків CSV
+ 09:13 — Сортування та нумерація
+ 10:27 — Основний цикл програми
+ 11:09 — Режими виводу
+ 11:47 — Завершення
+
+ДОДАТОК Б: ПОВНИЙ КОД ПРОГРАМИ
+       001: #!/bin/bash
+       002: 
+       003: echo_help() {
+       004:     echo "Usage: {login_name}-task2 [--help | --version] | [[-q|--quiet] [group] [cist_file.csv]"
+       005:     echo
+       006:     echo "Options:"
+       007:     echo "  --help           Show Description"
+       008:     echo "  --version        Show script version"
+       009:     echo "  -q, --quiet      Don't output information to STDOUTPUT"
+       010:     echo "  cist_file.csv    Path to CSV (Optional)"
+       011:     echo "  group            Academic Group (Optional)"
+       012: }
+       013: 
+       014: display_version() {
+       015:     echo "task2 version 1.0.0"
+       016: }
+       017: 
+       018: chooseFile(){
+       019:     if [[ -z "$csv_file" ]]; then
+       020:         pattern="TimeTable_??_??_20??.csv"
+       021: 
+       022:         files=($(ls -1t $pattern))
+       023:         
+       024:         if [[ ${#files[@]} -eq 0 ]]; then
+       025:             echo "No files found according to pattern: $pattern"
+       026:             exit 1
+       027:         fi
+       028: 
+       029:         echo "Select File:"
+       030:         select file in "${files[@]}"; do
+       031:             if [[ -n "$file" ]]; then
+       032:                 echo "You've selected: $file"
+       033:                 csv_file=$file
+       034:                 break
+       035:             else
+       036:                 echo "Wrong choice, try again"
+       037:             fi
+       038:         done
+       039:     fi
+       040: 
+       041:     if [ ! -e "$csv_file" ]; then
+       042:         echo "File doesn't exist"
+       043:         exit 1
+       044:     fi
+       045: 
+       046:     if [ ! -r "$csv_file" ]; then
+       047:         echo "File is not readable"
+       048:         exit 1
+       049:     fi
+       050: }
+       051: 
+       052: chooseGroup(){
+       053:     groups=($(iconv -f cp1251 -t UTF-8 "$csv_file" | awk -F',' 'NR > 1 {print substr($1,2,10)}' | sort | uniq))
+       054: 
+       055:     if [[ -z "$academic_group" && ${#groups[@]} -eq 1 ]]; then 
+       056:         academic_group=${groups[0]}
+       057:         echo "Only one group found: $academic_group. Using this group."
+       058:     elif [[ -z "$academic_group" ]]; then 
+       059:         echo "Select group"
+       060:         select group in ${groups[@]}; do
+       061:             if [[ -n "$group" ]]; then
+       062:                 academic_group=$group
+       063:                 break
+       064:             else
+       065:                 echo "Wrong choice, try again"
+       066:             fi
+       067:         done
+       068:     elif [[ ! " ${groups[*]} " =~ " ${academic_group} " ]]; then
+       069:         echo "No specified group found in a file, select different one: "
+       070:         select group in ${groups[@]}; do
+       071:             if [[ -n "$group" ]]; then
+       072:                 academic_group=$group
+       073:                 break
+       074:             else
+       075:                 echo "Wrong choice, try again"
+       076:             fi
+       077:         done
+       078:     fi
+       079: }
+       080: 
+       081: process_data() {
+       082:     iconv -f cp1251 -t UTF-8 "$csv_file" | awk -F'","' -v academic_group="$academic_group" '
+       083:     function formatTime(timeStr,   parts, hour, minute, ampm, result) {
+       084:         split(timeStr, parts, ":");
+       085:         hour = parts[1] + 0;
+       086:         minute = parts[2];
+       087:         ampm = (hour >= 12) ? "PM" : "AM";
+       088:         hour = (hour % 12 == 0) ? 12 : (hour % 12);
+       089:         result = (hour < 10 ? "0" hour : hour) ":" minute " " ampm;
+       090:         return result;
+       091:     }
+       092: 
+       093:     {
+       094:         split($1, temp_group, " ")
+       095:         if (temp_group[1] ~ academic_group && (length(temp_group[1]) - 1) == length(academic_group)) {
+       096:             subject = substr($1, 2)
+       097:             sub("^" academic_group " - ", "", subject)
+       098: 
+       099:             split($2, date, ".");
+       100:             formattedStartDate = date[2] "/" date[1] "/" date[3];
+       101: 
+       102:             split($4, date, ".");
+       103:             formattedEndDate = date[2] "/" date[1] "/" date[3];
+       104: 
+       105:             formattedStartTime = formatTime($3)
+       106:             formattedEndTime = formatTime($5)
+       107: 
+       108:             print subject "|" formattedStartDate "|" formattedStartTime "|" formattedEndDate "|" formattedEndTime "|" $12
+       109:         }
+       110:     }' | sort -t"|" -k1,1 -k2,2 | awk -F'|' -v prevName="$prevName" -v counter="$counter" -v pair_counter="$pair_counter" '
+       111:     {
+       112:         if(NR == 1){
+       113:             print("Subject,Start Date,Start Time,End Date,End Time,Description");
+       114:         }
+       115:         if($1 == prevName){
+       116:             if($1 ~ "Лб"){
+       117:                 if(pair_counter % 2 == 1){
+       118:                     print($1 "; №" counter "," $2 "," $3 "," $4 "," $5 "," $6)
+       119:                 } else { 
+       120:                     counter += 1 
+       121:                     print($1 "; №" counter "," $2 "," $3 "," $4 "," $5 "," $6)
+       122:                 }
+       123:                 pair_counter += 1 
+       124:             } else { 
+       125:                 counter += 1  
+       126:                 print($1 "; №" counter "," $2 "," $3 "," $4 "," $5 "," $6)
+       127:             }
+       128:         } else {
+       129:             pair_counter = 1
+       130:             counter = 1
+       131:             print($1 "; №" counter "," $2 "," $3 "," $4 "," $5 "," $6)
+       132:         }
+       133:         prevName = $1 
+       134:     }'
+       135: }
+       136: 
+       137: quiet_mode=false
+       138: 
+       139: while [[ $# -gt 0 ]]; do
+       140:     case "$1" in
+       141:         --help)
+       142:             echo_help
+       143:             exit 0
+       144:             ;;
+       145:         --version)
+       146:             display_version
+       147:             exit 0
+       148:             ;;
+       149:         -q|--quiet)
+       150:             quiet_mode=true
+       151:             shift
+       152:             ;;
+       153:         *)
+       154:             break
+       155:             ;;
+       156:     esac
+       157: done
+       158: 
+       159: if [[ $# -eq 1 ]]; then
+       160:     csv_file="$1"
+       161: else
+       162:     academic_group="$1"
+       163:     csv_file="$2"
+       164: fi
+       165: 
+       166: chooseFile
+       167: chooseGroup
+       168: 
+       169: if [[ "$quiet_mode" == true ]]; then
+       170:     process_data > "Google_${csv_file}" 
+       171:     status=$?
+       172: else
+       173:     process_data | tee "Google_${csv_file}"
+       174:     status=${PIPESTATUS[0]}
+       175: fi
+       176: 
+       177: if [[ $status -ne 0 ]]; then
+       178:     echo "Error occured while processing the file"
+       179:     exit 2
+       180: fi
+       181: 
+       182: exit 0
+     24
+     
+     
