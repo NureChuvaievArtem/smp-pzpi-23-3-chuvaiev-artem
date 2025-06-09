@@ -380,7 +380,7 @@
 
 
 ДОДАТОК В ПОВНИЙ КОД ПРОГРАМИ
-     entities.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab3/smp-pzpi-23-3-chuvaiev-artem-lab3-code/classes/entities.php
+     entities.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab3/smp-pzpi-23-3-chuvaiev-artem-lab3/classes/entities.php
        01: <?php
        02: class Item
        03: {
@@ -413,7 +413,7 @@
        30: 
        31: ?>
        
-     footer.php:	https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab3/smp-pzpi-23-3-chuvaiev-artem-lab3-code/layout/footer.php
+     footer.php:	https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab3/smp-pzpi-23-3-chuvaiev-artem-lab3/layout/footer.php
        01: <style>
        02:     a {
        03:         text-decoration: none;
@@ -436,7 +436,7 @@
        20:         Cart
        21:     </a>
        22: </footer>
-     header.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab3/smp-pzpi-23-3-chuvaiev-artem-lab3-code/layout/header.php
+     header.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab3/smp-pzpi-23-3-chuvaiev-artem-lab3/layout/header.php
        01: <style>
        02:     a {
        03:         text-decoration: none;
@@ -459,7 +459,7 @@
        20:         <i class="fas fa-shopping-cart" style="font-size:24px"></i> Cart
        21:     </a>
        22: </header>
-     addToCart.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab3/smp-pzpi-23-3-chuvaiev-artem-lab3-code/scripts/addToCart.php
+     addToCart.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab3/smp-pzpi-23-3-chuvaiev-artem-lab3/scripts/addToCart.php
        01: <?php
        02: session_start();
        03: 
@@ -504,7 +504,7 @@
        42:     echo "Неправильні дані.";
        43: }
        44:
-     cart.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab3/smp-pzpi-23-3-chuvaiev-artem-lab3-code/scripts/cart.php
+     cart.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab3/smp-pzpi-23-3-chuvaiev-artem-lab3/scripts/cart.php
        01: <?php
        02: function getCart()
        03: {
@@ -525,7 +525,7 @@
        18:     }
        19: }
        20:
-     clearCart.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab3/smp-pzpi-23-3-chuvaiev-artem-lab3-code/scripts/clearCart.php
+     clearCart.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab3/smp-pzpi-23-3-chuvaiev-artem-lab3/scripts/clearCart.php
        01: <?php
        02: session_start();
        03: 
@@ -537,7 +537,7 @@
        09: 
        10: header("Location: ../cart.php"); 
        11: exit;
-     deleteFromCart.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab3/smp-pzpi-23-3-chuvaiev-artem-lab3-code/scripts/deleteFromCart.php
+     deleteFromCart.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab3/smp-pzpi-23-3-chuvaiev-artem-lab3/scripts/deleteFromCart.php
        01: <?php
        02: session_start();
        03: if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_id'])) {
@@ -550,7 +550,7 @@
        10: header("Location: ../cart.php");
        11: exit();
        12:
-     init.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab3/smp-pzpi-23-3-chuvaiev-artem-lab3-code/scripts/init.php
+     init.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab3/smp-pzpi-23-3-chuvaiev-artem-lab3/scripts/init.php
        01: <?php
        02: include_once("./classes/entities.php");
        03: $program = new Program();
@@ -567,7 +567,7 @@
        14:     }
        15: }
        16: ?>
-     products.css: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab3/smp-pzpi-23-3-chuvaiev-artem-lab3-code/styles/products.css
+     products.css: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab3/smp-pzpi-23-3-chuvaiev-artem-lab3/styles/products.css
        01: .product-form {
        02:     margin: auto;
        03:     width: 60%;
@@ -629,7 +629,7 @@
        59:     background-color: #2980b9;
        60: }
        61:
-     style.css: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab3/smp-pzpi-23-3-chuvaiev-artem-lab3-code/styles/style.css
+     style.css: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab3/smp-pzpi-23-3-chuvaiev-artem-lab3/styles/style.css
        01: body {
        02:     margin: 0;
        03:     padding: 0;
@@ -643,7 +643,7 @@
        11:     justify-content: center;
        12:     align-items: center;
        13: }
-     cart.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab3/smp-pzpi-23-3-chuvaiev-artem-lab3-code/cart.php
+     cart.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab3/smp-pzpi-23-3-chuvaiev-artem-lab3/cart.php
        01: <?php
        02: include_once("./scripts/init.php");
        03: include_once("./scripts/cart.php");
@@ -720,7 +720,7 @@
        74: </body>
        75: 
        76: </html>
-     index.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab3/smp-pzpi-23-3-chuvaiev-artem-lab3-code/index.php
+     index.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab3/smp-pzpi-23-3-chuvaiev-artem-lab3/index.php
        01: <?php
        02: include_once("./scripts/init.php");
        03: ?>
@@ -747,7 +747,7 @@
        24: </body>
        25: 
        26: </html>
-     items.json: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab3/smp-pzpi-23-3-chuvaiev-artem-lab3-code/items.json
+     items.json: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab3/smp-pzpi-23-3-chuvaiev-artem-lab3/items.json
        01: {
        02:     "Items": {
        03:         "1": {
@@ -780,7 +780,7 @@
        30:         }
        31:     }
        32: }
-     products.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab3/smp-pzpi-23-3-chuvaiev-artem-lab3-code/products.php
+     products.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab3/smp-pzpi-23-3-chuvaiev-artem-lab3/products.php
        01: <?php
        02: include_once("./scripts/init.php");
        03: ?>

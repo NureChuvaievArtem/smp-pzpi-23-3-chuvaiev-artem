@@ -543,7 +543,7 @@
 
 
  ДОДАТОК В ПОВНИЙ КОД ПРОГРАМИ
- entities.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4-code/classes/entities.php
+ entities.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4/classes/entities.php
        01: <?php
        02: class Item
        03: {
@@ -574,7 +574,7 @@
        28: }
        29: 
        30: ?>
- footer.php:  https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4-code/layout/footer.php
+ footer.php:  https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4/layout/footer.php
        01: <style>
        02:     a {
        03:         text-decoration: none;
@@ -597,7 +597,7 @@
        20:         Cart
        21:     </a>
        22: </footer>
- header.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4-code/layout/header.php
+ header.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4/layout/header.php
        01: <style>
        02:     a {
        03:         text-decoration: none;
@@ -640,7 +640,7 @@
        40:     }
        41:     ?>
        42: </header>
- addToCart.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4-code/scripts/addToCart.php
+ addToCart.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4/scripts/addToCart.php
        01: <?php
        02: session_start();
        03: 
@@ -686,7 +686,7 @@
        43:     echo "Неправильні дані.";
        44: }
        45:
- cart.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4-code/scripts/cart.php
+ cart.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4/scripts/cart.php
        01: <?php
        02: function getCart()
        03: {
@@ -707,7 +707,7 @@
        18:     }
        19: }
        20:
- clearCart.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4-code/scripts/clearCart.php
+ clearCart.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4/scripts/clearCart.php
        01: <?php
        02: session_start();
        03: if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -718,7 +718,7 @@
        08: 
        09: header("Location: ../index.php?page=cart"); 
        10: exit;
- database.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4-code/scripts/database.php
+ database.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4/scripts/database.php
        01: <?php
        02: class DatabaseConnector
        03: {
@@ -764,7 +764,7 @@
        43: 
        44: $database = new DatabaseConnector("sql/webshop.db");
        45: ?>
- deleteFromCart.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4-code/scripts/deleteFromCart.php
+ deleteFromCart.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4/scripts/deleteFromCart.php
        01: <?php
        02: session_start();
        03: if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_id'])) {
@@ -776,7 +776,7 @@
        09: 
        10: header("Location: ../index.php?page=cart");
        11: exit();
- init.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4-code/scripts/init.php
+ init.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4/scripts/init.php
        01: <?php
        02: include_once("./classes/entities.php");
        03: 
@@ -816,7 +816,7 @@
        37:     }
        38: }
        39: ?>
- login.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4-code/scripts/login.php
+ login.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4/scripts/login.php
        01: <?php
        02:     include_once("../credentials.php"); 
        03:     session_start();
@@ -833,7 +833,7 @@
        14:         exit();
        15:     }
        16: ?>
- logout.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4-code/scripts/logout.php
+ logout.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4/scripts/logout.php
        01:     <?php
        02:     session_start();
        03: 
@@ -851,7 +851,7 @@
        15:         header("Location: ../index.php?page=login");
        16:     }
        17:
- profile.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4-code/scripts/profile.php
+ profile.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4/scripts/profile.php
        001: <?php
        002: session_start();
        003: 
@@ -967,7 +967,7 @@
        113:     exit();
        114: }
        115: ?>
- products.css: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4-code/styles/products.css
+ products.css: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4/styles/products.css
        001: .product-form {
        002:   margin: 0 auto;
        003:   max-width: 600px;
@@ -1068,7 +1068,7 @@
        098:   }
        099: }
        100:
- profile.css: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4-code/styles/profile.css
+ profile.css: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4/styles/profile.css
        001: .profile-container {
        002:     max-width: 1000px;
        003:     margin: 0 auto;
@@ -1215,7 +1215,7 @@
        144:     display: flex;
        145:     justify-content: flex-end;
        146: }
- style.css: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4-code/styles/style.css
+ style.css: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4/styles/style.css
        01: body {
        02:     margin: 0;
        03:     padding: 0;
@@ -1229,7 +1229,7 @@
        11:     justify-content: center;
        12:     align-items: center;
        13: }
- cart.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4-code/cart.php
+ cart.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4/cart.php
        01: <?php
        02: include_once("./scripts/cart.php");
        03: ?>
@@ -1294,7 +1294,7 @@
        62: <?php else: ?>
        63:     <p>Кошик порожній. <a href="./index.php?page=products">Перейти до покупок</a></p>
        64: <?php endif; ?>
- credentials.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4-code/credentials.php
+ credentials.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4/credentials.php
        1: <?php
        2: global $credentials;
        3: 
@@ -1302,9 +1302,9 @@
        5:     'username' => 'artem',
        6:     'password' => 'Artem_12345',
        7: ];
- home.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4-code/home.php
+ home.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4/home.php
        1: <h1>Web інтернет магазин</h1>
- index.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4-code/index.php
+ index.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4/index.php
        01: <?php
        02: include_once("./scripts/database.php");
        03: include_once("./scripts/init.php");
@@ -1357,7 +1357,7 @@
        50: </body>
        51: 
        52: </html>
- login.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4-code/login.php
+ login.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4/login.php
        01: <h1>Зареєтруйтесь</h1>
        02: 
        03: <form method="post" action="./scripts/login.php">
@@ -1369,9 +1369,9 @@
        09:         <button type="submit" class="submit-button">Увійти</button>
        10:     </div>
        11: </form>
- page404.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4-code/page404.php
+ page404.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4/page404.php
        1: <h1>Будь-ласка, спочатку авторизуйтесь</h1>
- products.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4-code/products.php
+ products.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4/products.php
        01: <?php
        02: if(!isset($_SESSION['username'])){
        03:     header("Location: ../index.php?page=unauth");
@@ -1415,11 +1415,11 @@
        41: <?php
        42: unset($_SESSION['form_error'], $_SESSION['form_data']);
        43: ?>
- profile.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4-code/profile.php
+ profile.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4/profile.php
        1: <?php
        2: global $profile;
        3: ?>
- profilePage.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4-code/profilePage.php
+ profilePage.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab4/smp-pzpi-23-3-chuvaiev-artem-lab4/profilePage.php
        01: <?php
        02: $profileErrors = $_SESSION['profile_errors'] ?? [];
        03: $imageErrors = $_SESSION['image_errors'] ?? [];

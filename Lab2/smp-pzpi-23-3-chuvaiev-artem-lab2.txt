@@ -367,7 +367,7 @@
 
      Додаток В
      Повний код програми
-     task3.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab2/smp-pzpi-23-3-chuvaiev-artem-lab2-code/task3.php
+     task3.php: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab2/smp-pzpi-23-3-chuvaiev-artem-lab2/task3.php
        001: #!/usr/bin/env php
        002: 
        003: <?php

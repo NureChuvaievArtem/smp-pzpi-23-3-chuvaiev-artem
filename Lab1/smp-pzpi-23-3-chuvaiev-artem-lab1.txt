@@ -360,7 +360,8 @@
  11:47 — Завершення
 
 ДОДАТОК Б: ПОВНИЙ КОД ПРОГРАМИ
-     task2.bash: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab1/smp-pzpi-23-3-chuvaiev-artem-lab1-code/task2.bash
+     smp-pzpi-23-3-chuvaiev-artem-lab1-code: https://github.com/NureChuvaievArtem/smp-pzpi-23-3-chuvaiev-artem/blob/main/Lab1/smp-pzpi-23-3-chuvaiev-artem-lab1/smp-pzpi-23-3-chuvaiev-artem-lab1-code
+     
        001: #!/bin/bash
        002: 
        003: echo_help() {
